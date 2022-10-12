@@ -30,3 +30,32 @@
 //     ));
 //   }
 // }
+
+import 'package:webview_flutter/webview_flutter.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
+class CartWebView extends StatefulWidget {
+  const CartWebView({super.key});
+
+  @override
+  State<CartWebView> createState() => _CartWebViewState();
+}
+
+class _CartWebViewState extends State<CartWebView> {
+  void initState() {
+    super.initState();
+    // Enable virtual display.
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WebView(
+      initialUrl: "https://shop.teamsg.in/",
+    );
+  }
+}

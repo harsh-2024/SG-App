@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tsg_new/BottomNav.dart';
 import 'package:tsg_new/blogs.dart';
 import 'package:tsg_new/scan.dart';
 import 'package:tsg_new/sgTV.dart';
@@ -32,60 +33,7 @@ class _ProfileState extends State<Profile> {
         return await _shouldPop();
       },
       child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-            showSelectedLabels: false,
-            currentIndex: selectedIndex,
-            selectedItemColor: setIconColor,
-            onTap: (index) => setState(() {
-                  selectedIndex = index;
-                  switch (selectedIndex) {
-                    case 0:
-                      {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
-                      }
-                      break;
-                    case 1:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AllBlogs()));
-                      break;
-                    case 2:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Scanner()));
-                      break;
-                    case 3:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Cart()));
-                      break;
-                    case 4:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Profile()));
-                      break;
-
-                    default:
-                  }
-                }),
-            // onTap: null,
-            items: const [
-              BottomNavigationBarItem(
-                  label: "Home",
-                  icon: Image(image: AssetImage("assets/home_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "SGTV",
-                  icon: Image(image: AssetImage("assets/sg_tv_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "Scan",
-                  icon: Image(image: AssetImage("assets/scan_code_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "Shop",
-                  icon: Image(image: AssetImage("assets/cart_icon.png"))),
-              BottomNavigationBarItem(
-                label: "Menu",
-                icon: Image(image: AssetImage("assets/profile_icon.png")),
-              ),
-            ]),
+        bottomNavigationBar: BottomNavBar(),
         drawerEnableOpenDragGesture: false,
         appBar: AppBar(
           title: Text("TEAM SG",
@@ -189,26 +137,26 @@ class _ProfileState extends State<Profile> {
                   color: Color(0xffa3a3a3),
                   thickness: 1,
                 ),
-                ListTile(
-                  onTap: () async {
-                    SharedPreferences preferences =
-                        await SharedPreferences.getInstance();
-                    await preferences.clear();
-                    Navigator.pushAndRemoveUntil<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => LoginPage(),
-                      ),
-                      (route) =>
-                          false, //if you want to disable back feature set to false
-                    );
-                  },
-                  tileColor: Colors.red,
-                  leading: Icon(Icons.logout_outlined),
-                  title: Text("Logout",
-                      style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.bold, fontSize: 18)),
-                ),
+                // ListTile(
+                //   onTap: () async {
+                //     SharedPreferences preferences =
+                //         await SharedPreferences.getInstance();
+                //     await preferences.clear();
+                //     Navigator.pushAndRemoveUntil<dynamic>(
+                //       context,
+                //       MaterialPageRoute<dynamic>(
+                //         builder: (BuildContext context) => LoginPage(),
+                //       ),
+                //       (route) =>
+                //           false, //if you want to disable back feature set to false
+                //     );
+                //   },
+                //   tileColor: Colors.red,
+                //   leading: Icon(Icons.logout_outlined),
+                //   title: Text("Logout",
+                //       style: GoogleFonts.roboto(
+                //           fontWeight: FontWeight.bold, fontSize: 18)),
+                // ),
                 Divider(
                   color: Color(0xffa3a3a3),
                   thickness: 1,

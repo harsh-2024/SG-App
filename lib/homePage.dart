@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:tsg_new/Screens/OurPlayersSeeMore.dart';
+import 'package:tsg_new/Screens/newsSeeMore.dart';
 import 'package:tsg_new/Screens/stores.dart';
 import 'package:tsg_new/profile.dart';
 import 'package:tsg_new/sgTV.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
+import 'BottomNav.dart';
 import 'Screens/news.dart';
 import 'cart.dart';
 import 'main.dart';
@@ -24,14 +27,6 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'acadamy.dart';
 import 'package:http/http.dart' as http;
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 List<YoutubePlayerController> videoControllers = [
   _videocontroller1,
   _videocontroller2,
@@ -40,24 +35,7 @@ List<YoutubePlayerController> videoControllers = [
   _videocontroller5,
   _videocontroller6,
 ];
-Future<Scores> getScore() async {
-  var request = http.Request(
-      'GET',
-      Uri.parse(
-          'https://api.cricapi.com/v1/currentMatches?apikey=cdf354ee-2220-4146-92f2-89ba0c0a5ce0&offset=0'));
 
-  http.StreamedResponse response = await request.send();
-
-  if (response.statusCode == 200) {
-    print(await response.stream.bytesToString());
-    return Scores.fromJson(jsonDecode(request.body));
-  } else {
-    print(response.reasonPhrase);
-    throw Exception("Error caught in fetching data");
-  }
-}
-
-late Future<Scores> scoreFetch;
 final _videocontroller1 = YoutubePlayerController(
   initialVideoId: 'yAPn0wEKq4w',
   params: YoutubePlayerParams(
@@ -94,6 +72,41 @@ final _videocontroller6 = YoutubePlayerController(
     autoPlay: false,
   ),
 );
+final List<Widget> Screens = [
+  HomePage(),
+  AllBlogs(),
+  Scanner(),
+  Cart(),
+  Profile(),
+];
+
+int pageIndex = 0;
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+Future<Scores> getScore() async {
+  var request = http.Request(
+      'GET',
+      Uri.parse(
+          'https://api.cricapi.com/v1/currentMatches?apikey=cdf354ee-2220-4146-92f2-89ba0c0a5ce0&offset=0'));
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200) {
+    print(await response.stream.bytesToString());
+    return Scores.fromJson(jsonDecode(request.body));
+  } else {
+    // print(response.reasonPhrase);
+    throw Exception("Error caught in fetching data");
+  }
+}
+
+late Future<Scores> scoreFetch;
 
 class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -217,60 +230,61 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-            showSelectedLabels: false,
-            currentIndex: selectedIndex,
-            selectedItemColor: setIconColor,
-            onTap: (index) => setState(() {
-                  selectedIndex = index;
-                  switch (selectedIndex) {
-                    case 0:
-                      {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
-                      }
-                      break;
-                    case 1:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AllBlogs()));
-                      break;
-                    case 2:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Scanner()));
-                      break;
-                    case 3:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Cart()));
-                      break;
-                    case 4:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Profile()));
-                      break;
+        bottomNavigationBar: BottomNavBar(),
 
-                    default:
-                  }
-                }),
-            // onTap: null,
-            items: const [
-              BottomNavigationBarItem(
-                  label: "Home",
-                  icon: Image(image: AssetImage("assets/home_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "SGTV",
-                  icon: Image(image: AssetImage("assets/sg_tv_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "Scan",
-                  icon: Image(image: AssetImage("assets/scan_code_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "Shop",
-                  icon: Image(image: AssetImage("assets/cart_icon.png"))),
-              BottomNavigationBarItem(
-                label: "Menu",
-                icon: Image(image: AssetImage("assets/profile_icon.png")),
-              ),
-            ]),
+        // BottomNavigationBar(
+        //   showSelectedLabels: false,
+        //   currentIndex: selectedIndex,
+        //   selectedItemColor: setIconColor,
+        //   onTap: (index) => setState(() {
+        //     selectedIndex = index;
+        //     switch (selectedIndex) {
+        //       case 0:
+        //         {
+        //           Navigator.push(context,
+        //               MaterialPageRoute(builder: (context) => HomePage()));
+        //         }
+        //         break;
+        //       case 1:
+        //         Navigator.push(context,
+        //             MaterialPageRoute(builder: (context) => AllBlogs()));
+        //         break;
+        //       case 2:
+        //         Navigator.push(context,
+        //             MaterialPageRoute(builder: (context) => Scanner()));
+        //         break;
+        //       case 3:
+        //         Navigator.push(
+        //             context, MaterialPageRoute(builder: (context) => Cart()));
+        //         break;
+        //       case 4:
+        //         Navigator.push(context,
+        //             MaterialPageRoute(builder: (context) => Profile()));
+        //         break;
+
+        //       default:
+        //     }
+        //   }),
+        //   // onTap: null,
+        //   items: const [
+        //     BottomNavigationBarItem(
+        //         label: "Home",
+        //         icon: Image(image: AssetImage("assets/home_icon.png"))),
+        //     BottomNavigationBarItem(
+        //         label: "SGTV",
+        //         icon: Image(image: AssetImage("assets/sg_tv_icon.png"))),
+        //     BottomNavigationBarItem(
+        //         label: "Scan",
+        //         icon: Image(image: AssetImage("assets/scan_code_icon.png"))),
+        //     BottomNavigationBarItem(
+        //         label: "Shop",
+        //         icon: Image(image: AssetImage("assets/cart_icon.png"))),
+        //     BottomNavigationBarItem(
+        //       label: "Menu",
+        //       icon: Image(image: AssetImage("assets/profile_icon.png")),
+        //     ),
+        //   ],
+        // ),
         body: ListView(
           children: <Widget>[
             Column(
@@ -655,25 +669,31 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 10),
-                  child: Row(
-                    children: const [
-                      Text(
-                        "Our Players",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        size: 18,
-                      )
-                    ],
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: ((context) => Players())));
+                    },
+                    child: Row(
+                      children: const [
+                        Text(
+                          "Our Players",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          size: 18,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 16,
                 ),
                 Container(
                   width: double.infinity,
@@ -685,7 +705,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: ((context, index) {
                       return Card(
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        elevation: 5,
+                        elevation: 2,
                         color: Color(0xFFF5F5F5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -708,99 +728,107 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Image.asset("assets/headingText_img.png"),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Heading Text 1",
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum",
-                              style: TextStyle(fontWeight: FontWeight.w300),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Divider(
-                              endIndent: 10,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                // Container(
+                //   padding: EdgeInsets.only(left: 20, right: 10),
+                //   child: Row(
+                //     children: <Widget>[
+                //       Image.asset("assets/headingText_img.png"),
+                //       const SizedBox(
+                //         width: 20,
+                //       ),
+                //       Expanded(
+                //         child: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: const [
+                //             Text(
+                //               "Heading Text 1",
+                //               style: TextStyle(fontWeight: FontWeight.w500),
+                //             ),
+                //             Text(
+                //               "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum",
+                //               style: TextStyle(fontWeight: FontWeight.w300),
+                //             ),
+                //             SizedBox(
+                //               height: 10,
+                //             ),
+                //             Divider(
+                //               endIndent: 10,
+                //               color: Colors.grey,
+                //             ),
+                //           ],
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // ),
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Image.asset("assets/headingText_img.png"),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Heading Text 2",
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum",
-                              style: TextStyle(fontWeight: FontWeight.w300),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Divider(
-                              endIndent: 10,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                // Container(
+                //   padding: EdgeInsets.only(left: 20, right: 10),
+                //   child: Row(
+                //     children: <Widget>[
+                //       Image.asset("assets/headingText_img.png"),
+                //       const SizedBox(
+                //         width: 20,
+                //       ),
+                //       Expanded(
+                //         child: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: const [
+                //             Text(
+                //               "Heading Text 2",
+                //               style: TextStyle(fontWeight: FontWeight.w500),
+                //             ),
+                //             Text(
+                //               "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum",
+                //               style: TextStyle(fontWeight: FontWeight.w300),
+                //             ),
+                //             SizedBox(
+                //               height: 10,
+                //             ),
+                //             Divider(
+                //               endIndent: 10,
+                //               color: Colors.grey,
+                //             ),
+                //           ],
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // ),
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "See More Updates",
-                      style: TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.bold),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_outlined,
-                      color: Colors.red,
-                      size: 15,
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_outlined,
-                      color: Colors.red,
-                      size: 15,
-                    ),
-                  ],
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Players()));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "See More Updates",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: Colors.red,
+                        size: 15,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: Colors.red,
+                        size: 15,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 30,
@@ -920,13 +948,18 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     Text(
                       "See More Updates",
                       style: TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.bold),
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
                     ),
                     Icon(
                       Icons.arrow_forward_ios_outlined,
@@ -997,6 +1030,39 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 20,
                 ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => SearchAcadamy())));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "See More Updates",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: Colors.red,
+                        size: 15,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: Colors.red,
+                        size: 15,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Divider(
                   thickness: 8,
                   color: Color(0xffd9d9d9d9),
@@ -1005,7 +1071,12 @@ class _HomePageState extends State<HomePage> {
                   height: 20,
                 ),
                 InkWell(
-                  onTap: null,
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => NewsSeeMore())));
+                  },
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Row(
@@ -1145,6 +1216,42 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => NewsSeeMore())));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "See More Updates",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: Colors.red,
+                        size: 15,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: Colors.red,
+                        size: 15,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Divider(
                   thickness: 8,
                   color: Color(0xffd9d9d9d9),
@@ -1169,184 +1276,170 @@ class LiveBannerTab extends StatelessWidget {
     final height = size.height;
     final width = size.width;
 
-    return FutureBuilder(
-      future: scoreFetch,
-      builder: ((context, snapshot) {
-        if (snapshot.hasData) {
-          // print(snapshot.data!.data![1].name);
-          return ListView.builder(itemBuilder: (context, index) {
-            return Container(
-              height: 171,
-              width: 364,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  color: Color(0xff2b2b2b),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(14),
-                    bottomRight: Radius.circular(14),
-                    topLeft: Radius.circular(14),
-                    topRight: Radius.circular(14),
-                  )),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 136,
-                    width: 364,
-                    decoration: BoxDecoration(
-                        color: Color(0xff4e4e4e),
-                        borderRadius: BorderRadius.circular(14)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      height: 171,
+      width: 364,
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          color: Color(0xff2b2b2b),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(14),
+            bottomRight: Radius.circular(14),
+            topLeft: Radius.circular(14),
+            topRight: Radius.circular(14),
+          )),
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 136,
+            width: 364,
+            decoration: BoxDecoration(
+                color: Color(0xff4e4e4e),
+                borderRadius: BorderRadius.circular(14)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Stack(
+                      alignment: Alignment.center,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Stack(
-                              alignment: Alignment.center,
-                              children: <Widget>[
-                                Image.asset("assets/live_banner_image.png"),
-                                Text(
-                                  "Live",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              snapshot.data!.data![index].name!,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
+                        Image.asset("assets/live_banner_image.png"),
+                        Text(
+                          "Live",
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Divider(
-                          thickness: 2,
-                          color: Colors.white,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          height: 20,
-                          width: 364,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Image.asset("assets/Flag_of_India.png"),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "IND",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              SizedBox(
-                                width: 200,
-                              ),
-                              Text(
-                                "(50)",
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xffdddddd)),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "300/2",
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xffffffff)),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          height: 20,
-                          width: 364,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Image.asset("assets/Flag_of_aus.png"),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "AUS",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              SizedBox(
-                                width: 195,
-                              ),
-                              Text(
-                                "(25)",
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xffdddddd),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "100/4",
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xffffffff),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 20,
-                          width: 364,
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          child: Text(
-                            snapshot.data!.data![index].status!,
-                            style: TextStyle(
-                                color: Color(0xffe6e6e6),
-                                fontWeight: FontWeight.w300),
-                          ),
-                        )
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: 14),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: const Text(
-                        "SCHEDULE",
-                        textAlign: TextAlign.right,
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text(
+                      "Match 2 ODI ",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                Divider(
+                  thickness: 2,
+                  color: Colors.white,
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  height: 20,
+                  width: 364,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Image.asset("assets/Flag_of_India.png"),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "IND",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      SizedBox(
+                        width: 200,
+                      ),
+                      Text(
+                        "(50)",
                         style: TextStyle(
-                          color: Color(0xffc1c1c1),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xffdddddd)),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "300/2",
+                        style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xffffffff)),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  height: 20,
+                  width: 364,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Image.asset("assets/Flag_of_aus.png"),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "AUS",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      SizedBox(
+                        width: 195,
+                      ),
+                      Text(
+                        "(25)",
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Color(0xffdddddd),
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "100/4",
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Color(0xffffffff),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ],
                   ),
-                ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 20,
+                  width: 364,
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Text(
+                    "AUS needs 200 runs in 150 balls at 8 RPO.",
+                    style: TextStyle(
+                        color: Color(0xffe6e6e6), fontWeight: FontWeight.w300),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Container(
+            padding: EdgeInsets.only(right: 14),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: const Text(
+                "SCHEDULE",
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  color: Color(0xffc1c1c1),
+                ),
               ),
-            );
-          });
-        } else {
-          throw Exception("error caught");
-        }
-      }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

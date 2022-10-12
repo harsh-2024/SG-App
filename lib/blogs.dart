@@ -1,4 +1,6 @@
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tsg_new/BottomNav.dart';
+import 'package:tsg_new/Screens/exclusiveTalk.dart';
 import 'package:tsg_new/profile.dart';
 import 'package:tsg_new/scan.dart';
 import 'package:tsg_new/sgTV.dart';
@@ -144,60 +146,7 @@ class _AllBlogsState extends State<AllBlogs> {
         return await _shouldPop();
       },
       child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-            showSelectedLabels: false,
-            currentIndex: selectedIndex,
-            selectedItemColor: setIconColor,
-            onTap: (index) => setState(() {
-                  selectedIndex = index;
-                  switch (selectedIndex) {
-                    case 0:
-                      {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
-                      }
-                      break;
-                    case 1:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AllBlogs()));
-                      break;
-                    case 2:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Scanner()));
-                      break;
-                    case 3:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Cart()));
-                      break;
-                    case 4:
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Profile()));
-                      break;
-
-                    default:
-                  }
-                }),
-            // onTap: null,
-            items: const [
-              BottomNavigationBarItem(
-                  label: "Home",
-                  icon: Image(image: AssetImage("assets/home_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "SGTV",
-                  icon: Image(image: AssetImage("assets/sg_tv_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "Scan",
-                  icon: Image(image: AssetImage("assets/scan_code_icon.png"))),
-              BottomNavigationBarItem(
-                  label: "Shop",
-                  icon: Image(image: AssetImage("assets/cart_icon.png"))),
-              BottomNavigationBarItem(
-                label: "Menu",
-                icon: Image(image: AssetImage("assets/profile_icon.png")),
-              ),
-            ]),
+        bottomNavigationBar: BottomNavBar(),
         key: scaffoldKey,
         appBar: AppBar(
           titleSpacing: 0,
@@ -471,25 +420,35 @@ class _AllBlogsState extends State<AllBlogs> {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "See More Updates",
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        color: Colors.red,
-                        size: 15,
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        color: Colors.red,
-                        size: 15,
-                      ),
-                    ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => ExclusiveTalks())));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          "See More Updates",
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          color: Colors.red,
+                          size: 15,
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          color: Colors.red,
+                          size: 15,
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 20,
