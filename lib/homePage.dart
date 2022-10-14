@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:tsg_new/Screens/OurPlayersSeeMore.dart';
 import 'package:tsg_new/Screens/newsSeeMore.dart';
 import 'package:tsg_new/Screens/stores.dart';
+import 'package:tsg_new/models/BlogPostsModal.dart';
 import 'package:tsg_new/profile.dart';
 import 'package:tsg_new/sgTV.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:youtube_plyr_iframe/youtube_plyr_iframe.dart';
 import 'BottomNav.dart';
 import 'Screens/news.dart';
+import 'blogPosts.dart';
 import 'cart.dart';
 import 'main.dart';
 import 'acadamy.dart';
@@ -531,6 +533,9 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       InkWell(
                         onTap: () {
                           Navigator.push(
@@ -576,6 +581,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       InkWell(
                         onTap: () {
                           Navigator.push(
@@ -618,6 +626,9 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        width: 10,
                       ),
                       InkWell(
                         onTap: () {
@@ -842,21 +853,27 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 10),
-                  child: Row(
-                    children: const [
-                      Text(
-                        "Blog",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        size: 18,
-                      )
-                    ],
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: ((context) => Posts())));
+                    },
+                    child: Row(
+                      children: const [
+                        Text(
+                          "Blogs",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          size: 18,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -951,27 +968,33 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "See More Updates",
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_outlined,
-                      color: Colors.red,
-                      size: 15,
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_outlined,
-                      color: Colors.red,
-                      size: 15,
-                    ),
-                  ],
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: ((context) => Posts())));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "See More Updates",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: Colors.red,
+                        size: 15,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: Colors.red,
+                        size: 15,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 30,

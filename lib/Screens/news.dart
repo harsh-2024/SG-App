@@ -110,7 +110,7 @@
 //                       future: newsFetched,
 //                       builder: (context, snapshot) {
 //                         if (snapshot.hasData) {
-//                           ;
+//                           return null;
 //                         }
 //                       })
 //                 ],

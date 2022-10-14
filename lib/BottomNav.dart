@@ -18,6 +18,9 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final height = size.height;
+    final width = size.width;
     return Theme(
       data: ThemeData(
         splashColor: Colors.blueAccent,
@@ -27,13 +30,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
       child: Container(
         decoration: BoxDecoration(
             border: Border.fromBorderSide(BorderSide(color: Colors.grey))),
-        height: 75,
-        padding: EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 10,
-        ),
+        height: height * 0.06822,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             InkWell(
               onTap: () {
@@ -57,29 +56,41 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             InkWell(
               onTap: () {
+                setState(() {
+                  pageIndex = 1;
+                });
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => AllBlogs()));
               },
-              child: Image(
-                height: 30,
-                width: 30,
-                image: AssetImage("assets/sg_tv_icon_navBar.png"),
-              ),
+              child: pageIndex == 1
+                  ? Image(
+                      height: 30,
+                      width: 30,
+                      image: AssetImage("assets/sg_tv_filled.png"))
+                  : Image(
+                      height: 30,
+                      width: 30,
+                      image: AssetImage("assets/sg_tv_icon_navBar.png"),
+                    ),
             ),
             InkWell(
               onTap: () {
+                setState(() {
+                  pageIndex = 2;
+                });
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Scanner()));
               },
-              child: Container(
-                height: 65,
-                width: 65,
-                decoration: BoxDecoration(shape: BoxShape.circle),
-                child: Image(
-                  fit: BoxFit.fill,
-                  image: AssetImage("assets/qr_button.png"),
-                ),
-              ),
+              child: pageIndex == 2
+                  ? Image(
+                      height: 60,
+                      width: 60,
+                      image: AssetImage("assets/qr_button.png"))
+                  : Image(
+                      height: 60,
+                      width: 60,
+                      image: AssetImage("assets/qr_code_outlined.png"),
+                    ),
             ),
             InkWell(
               onTap: () {
@@ -103,14 +114,22 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             InkWell(
               onTap: () {
+                setState(() {
+                  pageIndex = 4;
+                });
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Profile()));
               },
-              child: Image(
-                height: 25,
-                width: 25,
-                image: AssetImage("assets/menu_button.png"),
-              ),
+              child: pageIndex == 4
+                  ? Image(
+                      height: 25,
+                      width: 25,
+                      image: AssetImage("assets/menu_filled.png"))
+                  : Image(
+                      height: 25,
+                      width: 25,
+                      image: AssetImage("assets/menu_button.png"),
+                    ),
             ),
           ],
         ),
